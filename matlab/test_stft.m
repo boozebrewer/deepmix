@@ -1,19 +1,23 @@
 
 % test stft
-
+clear all;
 % clr = jet;
 clr = gray;
 % music program (stochastic non-stationary signal)
-% [xOrig, fsOrig] = wavread('track.wav');   
-load benmtlb;
-xOrig = mtlb;
-fsOrig = Fs;
-newFs = 7350;
+[xOrig, fsOrig] = wavread('ben_matlab.wav');   
+% load benmtlb;
+% xOrig = mtlb;
+% fsOrig = Fs;
+
+fprintf('orig fs %f\n',fsOrig);
+soundsc(xOrig,fsOrig);
+
+newFs = 8000;
 [P,Q] = rat(newFs/fsOrig);
-abs(P/Q*fsOrig-newFs)
+abs(P/Q*fsOrig-newFs);
 x = resample(xOrig,P,Q);
 fs = newFs;
-
+fprintf('new fs %f\n',fs);
 
 x = x(:, 1);                       
 xmax = max(abs(x));                 
@@ -24,28 +28,30 @@ xlen = length(x);
 t = (0:xlen-1)/fs;                  
 
 % define analysis and synthesis parameters
-% wlen = 1024;
 wlen=512;
-h = wlen/4;
-nfft = wlen;
+h = wlen/8;
+nfft = wlen*4;
 
 % perform time-frequency analysis and resynthesis of the original signal
 [stftOut, f, t_stft] = stft(x, wlen, h, nfft, fs);
 [x_istft, t_istft] = istft(stftOut, h, nfft, fs);
 x_istft = x_istft(:);
+x_istft = x_istft/max(x_istft);
 % check max error
-maxErr = max(max(abs(x(1:length(x_istft))-x_istft)));
+[x_istft,x] = trncxy(x_istft,x);
+maxErr = max(max(abs(x_istft-x)));
 fprintf('max error (x_istft-x) %g\n',maxErr);
 
-% prepare spectrogram
+%% prepare spectrogram
+% y = resample(stftOut,2,1);
 y = stftOut;
 yabs = abs(y);
 yphase = angle(y);
-yflip = yabs(end:-1:1,:);
-ymax = max(yflip(:));
-yn = yflip./ymax;
+
+ymax = max(yabs(:));
+yn = yabs./ymax;
 ylog = 10*log10(yn);
-ylog(ylog<-40)=-50;
+% ylog(ylog<-40)=-50;
 mi = min(ylog(:));
 ylog2 = ylog - mi;
 mx = max(ylog2(:));
@@ -58,10 +64,14 @@ bLoaded = bLoaded./2^16;
 % check max error
 maxErr = max(max(abs(ylog3-bLoaded)));
 fprintf('max error (ylog3-bLoaded) %g\n',maxErr);
+
+fprintf('size out png %dx%d\n', size(bLoaded,1),size(bLoaded,2));
 %% plot
 figure(1);
-subplot(121);
-imagesc([t(1),t(end)],-[f(end),f(1)],bLoaded);
+% subplot(121);
+imagesc([t(1),t(end)],[f(1),f(end)],bLoaded);
+set(gca,'YDir','normal')
+title('png');
 colormap(clr);
 colorbar;
 
@@ -70,35 +80,38 @@ colorbar;
 a=-0;
 b=-a;
 bLoadedNoised = bLoaded.*(1+(a+b*rand(size(bLoaded))));
+
 %% plot noised
-figure(1);
-subplot(122);
-imagesc([t(1),t(end)],-[f(end),f(1)],bLoadedNoised);
-colormap(clr);
-colorbar;
+% figure(1);
+% subplot(122);
+% imagesc([t(1),t(end)],-[f(end),f(1)],bLoadedNoised);
+% title('noised');
+% colormap(clr);
+% colorbar;
 %% reconstract
 
 ylogReconst = bLoadedNoised*mx+mi;
 yReconst = 10.^(ylogReconst/10) * ymax;
-yRecoFlip = yReconst(end:-1:1,:);
+
 
 % check max error
-maxErr = max(max(abs(yRecoFlip-yabs)));
+maxErr = max(max(abs(yReconst-yabs)));
 fprintf('max error (yRecoFlip-yabs) %g\n',maxErr);
-figure;plot(yabs(:,1))
-hold on;plot(yRecoFlip(:,1))
+% frame = 5;
+% figure;plot(yabs(:,frame))
+% hold on;plot(yReconst(:,frame))
 
 % add phase
-yRecoFlipPlusPhase = yRecoFlip .* exp(1i*yphase);
+yRecoPlusPhase = yReconst .* exp(1i*yphase);
 % check max error
-maxErr = max(max(abs(yRecoFlipPlusPhase-y)));
-fprintf('max error (yRecoFlipPlusPhase-y) %g\n',maxErr);
+maxErr = max(max(abs(yRecoPlusPhase-y)));
+fprintf('max error (yRecoPlusPhase-y) %g\n',maxErr);
 % reconstruct istft
-[xReco, tRec] = istft(yRecoFlipPlusPhase, h, nfft, fs);
+[xReco, tRec] = istft(yRecoPlusPhase, h, nfft, fs);
 xReco = xReco(:);
-maxErr = max(max(abs(x(1:length(xReco))-xReco)));
-fprintf('max error (x(1:length(xReco))-xReco) %g\n',maxErr);
-
+[xReco,x] = trncxy(xReco,x);
+maxErr = max(max(abs(x-xReco)));
+fprintf('max error (x-xReco) %g\n',maxErr);
 
 
 %% play
