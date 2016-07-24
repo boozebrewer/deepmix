@@ -7,11 +7,14 @@ for i=2:-1:1
 end
 disp('Start speaking.')
 t = 1;
-recordblocking(recObj, 0.5);
+recordblocking(recObj, 2);
 disp('End of Recording.');
 
 play(recObj);
 
-y = getaudiodata(recObj);
+mtlb = getaudiodata(recObj);
 
-plot(y);
+plot(mtlb);
+
+% save
+save('rec','mtlb','Fs');

@@ -1,7 +1,7 @@
 clear, clc, close all
 
 % music program (stochastic non-stationary signal)
-[x, fs] = wavread('track.wav');     
+[x, fs] = wavread('ben_matlab.wav');     
 x = x(:, 1);                       
 xmax = max(abs(x));                 
 x = x/xmax; 

@@ -1,16 +1,16 @@
 
 % test stft
-clear all;
+clearvars;
 % clr = jet;
 clr = gray;
 % music program (stochastic non-stationary signal)
 [xOrig, fsOrig] = wavread('ben_matlab.wav');   
-% load benmtlb;
-% xOrig = mtlb;
-% fsOrig = Fs;
+% load mtlb;xOrig = mtlb;fsOrig = Fs;
 
 fprintf('orig fs %f\n',fsOrig);
-soundsc(xOrig,fsOrig);
+%playback x original
+soundblocking(xOrig, fsOrig);
+
 
 newFs = 8000;
 [P,Q] = rat(newFs/fsOrig);
@@ -21,14 +21,14 @@ fprintf('new fs %f\n',fs);
 
 x = x(:, 1);                       
 xmax = max(abs(x));                 
-x = x/xmax; 
+x = x/xmax *0.9; 
 
 % signal parameters
 xlen = length(x);                   
 t = (0:xlen-1)/fs;                  
 
 % define analysis and synthesis parameters
-wlen=512;
+wlen=256;
 h = wlen/8;
 nfft = wlen*4;
 
@@ -55,23 +55,35 @@ ylog = 10*log10(yn);
 mi = min(ylog(:));
 ylog2 = ylog - mi;
 mx = max(ylog2(:));
-ylog3 = ylog2./mx;
+yTosave = ylog2./mx;
 % save
-imwrite(ylog3,'yn.png','BitDepth',16);
-% load
-bLoaded = double(imread('yn.png'));
-bLoaded = bLoaded./2^16;
-% check max error
-maxErr = max(max(abs(ylog3-bLoaded)));
-fprintf('max error (ylog3-bLoaded) %g\n',maxErr);
+imwrite(yTosave,'yn.png','BitDepth',16);
+fprintf('saving size out png %dx%d\n', size(yTosave,1),size(yTosave,2));
 
-fprintf('size out png %dx%d\n', size(bLoaded,1),size(bLoaded,2));
+%% load
+bLoaded = double(imread('test.png'));
+if size(bLoaded,3) == 3
+    bLoaded = sum(bLoaded,3);
+    bLoaded = bLoaded/max(bLoaded(:));
+else
+    bLoaded = bLoaded./2^16;
+end
+% check max error
+maxErr = max(max(abs(yTosave-bLoaded)));
+fprintf('max error (yTosave-bLoaded) %g\n',maxErr);
+
 %% plot
 figure(1);
-% subplot(121);
+subplot(121);
+imagesc([t(1),t(end)],[f(1),f(end)],yTosave);
+set(gca,'YDir','normal')
+title('png to save');
+colorbar;
+
+subplot(122);
 imagesc([t(1),t(end)],[f(1),f(end)],bLoaded);
 set(gca,'YDir','normal')
-title('png');
+title('png loaded');
 colormap(clr);
 colorbar;
 
@@ -88,32 +100,6 @@ bLoadedNoised = bLoaded.*(1+(a+b*rand(size(bLoaded))));
 % title('noised');
 % colormap(clr);
 % colorbar;
-%% reconstract
 
-ylogReconst = bLoadedNoised*mx+mi;
-yReconst = 10.^(ylogReconst/10) * ymax;
-
-
-% check max error
-maxErr = max(max(abs(yReconst-yabs)));
-fprintf('max error (yRecoFlip-yabs) %g\n',maxErr);
-% frame = 5;
-% figure;plot(yabs(:,frame))
-% hold on;plot(yReconst(:,frame))
-
-% add phase
-yRecoPlusPhase = yReconst .* exp(1i*yphase);
-% check max error
-maxErr = max(max(abs(yRecoPlusPhase-y)));
-fprintf('max error (yRecoPlusPhase-y) %g\n',maxErr);
-% reconstruct istft
-[xReco, tRec] = istft(yRecoPlusPhase, h, nfft, fs);
-xReco = xReco(:);
-[xReco,x] = trncxy(xReco,x);
-maxErr = max(max(abs(x-xReco)));
-fprintf('max error (x-xReco) %g\n',maxErr);
-
-
-%% play
-% soundsc(x,fs);
-% soundsc(xReco,fs);
+%% reconstruction
+reconstruct(bLoadedNoised,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x);
