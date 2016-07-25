@@ -19,7 +19,7 @@ soundblocking(xOrig, fsOrig);
 
 
 %% make spectrograms
-[yTosave,t,f,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x] = makespect(xOrig,fsOrig);
+makespect(xOrig,fsOrg
 
 %% load
 bL = loadspect(selector,yTosave,t,f,clr);
