@@ -63,7 +63,7 @@ def run_test():
     # get output
     result_path = 'client/result.png'
     out6 = download_image(BASE_URL, result_path)
-    # im = Image.open(result_path).show()
+    im = Image.open(result_path).show()
     print('result: ' + str(out6))
     print('done')
 

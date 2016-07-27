@@ -1,4 +1,4 @@
-from webserver import app
+from app import app
 from flask import send_file, request, jsonify
 import os
 import uuid
@@ -32,12 +32,12 @@ def index():
 
 @app.route('/api/1/stdout')
 def get_stdout():
-    return send_file('algo_out/algo_stdout.txt')
+    return send_file('../algo_out/algo_stdout.txt')
 
 @app.route('/api/1/upload/<string:type>', methods=['POST'])
 def save_pngs(type):
     file = request.files['file']
-    path = 'images/' + type +'.png'
+    path = 'images/' + type + '.png'
     print('server wd: ' + os.getcwd())
     file.save(path)
     return jsonify(status='ok')
@@ -49,7 +49,8 @@ def start():
 
 @app.route('/api/1/output')
 def get_image():
-    return send_file('test/3.png')
+    print('curr dir: ', os.getcwd())
+    return send_file('../test/3.png')
 
 
 
