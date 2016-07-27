@@ -22,10 +22,10 @@ def download_image(url, filename=None):
     else:
         return io.BytesIO(resp.content)
 
-def upload_image(filename, type):
+def upload_image(url, filename, imgtype):
     ''' upload '''
     # type is 'content' or 'style'
-    url = "{}/upload/{}".format(BASE_URL, type)
+    url = "{}/upload/{}".format(url, imgtype)
     with open(filename, 'rb') as f:
         resp = requests.post(url, files={'file': f})
     if not resp.ok:
@@ -48,15 +48,12 @@ def start(url, filename=None):
     resp = requests.get(url + '/start')
     return resp.json()
 
-# @click.command()
-# @click.argument('dst', default='', type=click.Path(writable=True, dir_okay=False))
-def main(dst=None):
+def run_test():
     print('working dir: ' + os.getcwd())
-
     # upload content
-    out2 = upload_image('test/1.png', type='style')
-    out3 = upload_image('test/2.png', type='content')
-    print('style ' + str(out2) + 'content ' + str(out3))
+    out2 = upload_image(BASE_URL, 'test/1.png', 'style')
+    out3 = upload_image(BASE_URL, 'test/2.png', 'content')
+    print('upload: ' + 'style ' + str(out2) + ' content ' + str(out3))
     # start algo
     out4 = start(BASE_URL)
     print('algo: ' + str(out4))
@@ -69,6 +66,33 @@ def main(dst=None):
     # im = Image.open(result_path).show()
     print('result: ' + str(out6))
     print('done')
+
+
+@click.command()
+@click.option('--url', default=BASE_URL)
+@click.option('--path', default='')
+@click.option('--imgtype', default='')
+@click.option('--do', type=click.Choice(['upload', 'start', 'std', 'result', 'testing']), default='testing')
+def main(do, path, imgtype, url):
+    BASE_URL = url
+    if do == 'testing':
+        run_test()
+    elif do == 'upload':
+        out3 = upload_image(BASE_URL, path, imgtype)
+        print(imgtype + str(out3))
+    elif do == 'start':
+        out4 = start(BASE_URL)
+        print('algo: ' + str(out4))
+    elif do == 'std':
+        out5 = get_stdout(BASE_URL, 'client/std.txt')
+        print('std: ' + str(out5))
+    elif do == 'result':
+        result_path = 'client/result.png'
+        out6 = download_image(BASE_URL, result_path)
+        print('result: ' + str(out6))
+    else:
+        raise Exception()
+
 
 if __name__ == '__main__':
     main()
