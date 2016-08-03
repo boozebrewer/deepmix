@@ -30,9 +30,11 @@ def index():
     print('hellooooo')
     return "SSSSS"
 
+
 @app.route('/api/1/stdout')
 def get_stdout():
     return send_file('../algo_out/algo_stdout.txt')
+
 
 @app.route('/api/1/upload/<string:type>', methods=['POST'])
 def save_pngs(type):
@@ -42,10 +44,12 @@ def save_pngs(type):
     file.save(path)
     return jsonify(status='ok')
 
+
 @app.route('/api/1/start')
 def start():
     out = run_style_transfer()
     return out
+
 
 @app.route('/api/1/output')
 def get_image():

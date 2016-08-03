@@ -9,8 +9,8 @@ clr = gray;
 selector = 'test.png';
 
 % music program (stochastic non-stationary signal)
-[xOrig, fsOrig] = wavread('ben_holech2.wav');   
-% load mtlb;xOrig = mtlb;fsOrig = Fs;
+% [xOrig, fsOrig] = wavread('ben_matlab.wav');   
+load mtlb;xOrig = mtlb;fsOrig = Fs;
 % load('myhandel');xOrig = mtlb;fsOrig = Fs;
 
 fprintf('orig fs %f\n',fsOrig);
