@@ -1,4 +1,4 @@
-function reconstruct(bLoadedNoised,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x)
+function reconstruct(bLoadedNoised,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x,nrm_factor)
 %% reconstract
 
 ylogReconst = bLoadedNoised*mx+mi;
@@ -21,13 +21,19 @@ fprintf('max error (yAbsRecoPlusPhase-y) %g\n',maxErr);
 % reconstruct istft
 [xReco, tRec] = istft(yAbsRecoPlusPhase, h, nfft, fs);
 xReco = xReco(:);
-xReco = xReco/max(xReco(:)) * 0.9;
+xReco = xReco/max(xReco(:)) * nrm_factor;
 [xReco,x] = trncxy(xReco,x);
-maxErr = max(max(abs(x-xReco)));
+
+win_len = nfft/4;
+xReco_t = trim_edges(xReco, win_len);
+x_t = trim_edges(x, win_len);
+
+maxErr = max(max(abs(x_t-xReco_t)));
 fprintf('max error (x-xReco) %g\n',maxErr);
 
 figure;
 plot(x),hold all;plot(xReco);
+legend('original content','reconstructed');
 title('reconstruction');
 
 %% play

@@ -1,7 +1,7 @@
-function run_aws(weight, size, iters, init)
+function run_aws(weight, imsize, iters, init)
 if nargin==0
     weight = 500;
-    size = 513;
+    imsize = 513;
     iters=100;
     init='random';
 end
@@ -25,7 +25,7 @@ cmd_th = ['time th neural_style.lua ' ...
     '-style_weight %d ' ...
     '-image_size %d ' ...
     '-seed 123 '];
-cmd_th = sprintf(cmd_th,init,iters,weight,size); 
+cmd_th = sprintf(cmd_th,init,iters,weight,imsize); 
 cmd = 'echo $PATH;export PATH=/home/ubuntu/torch/install/bin:/home/ubuntu/anaconda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/cuda/bin:/path/to/dir1;echo $PATH; ';
 cmd = [cmd, cmd_th];
 [ssh2_struct, command_result] = ssh2_command(ssh2_conn, ['cd ~/repos/neural-style/; ', cmd]);

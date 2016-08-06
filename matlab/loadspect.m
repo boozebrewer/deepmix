@@ -1,6 +1,6 @@
-function bL = loadspect(selector,yTosave,t,f,clr)
+function bL = loadspect(output_path,yTosave,t,f,clr)
 %% load
-bLoaded = double(imread(selector));
+bLoaded = double(imread(output_path));
 if size(bLoaded,3) == 3
     bLoaded = sum(bLoaded,3);
     bLoaded = bLoaded/max(bLoaded(:));
@@ -16,7 +16,7 @@ figure(1);
 subplot(121);
 imagesc([t(1),t(end)],[f(1),f(end)],yTosave);
 set(gca,'YDir','normal')
-title('png to save');
+title('original png');
 colorbar;
 
 subplot(122);

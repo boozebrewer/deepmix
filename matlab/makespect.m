@@ -1,4 +1,4 @@
-function [yTosave,t,f,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x] =  makespect(xOrig,fsOrig)
+function [yTosave,t,f,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x,nrm_factor] =  makespect(xOrig,fsOrig)
 newFs = 8000;
 [P,Q] = rat(newFs/fsOrig);
 abs(P/Q*fsOrig-newFs);
@@ -7,8 +7,9 @@ fs = newFs;
 fprintf('new fs %f\n',fs);
 
 x = x(:, 1);                       
-xmax = max(abs(x));                 
-x = x/xmax *0.9; 
+xmax = max(abs(x));   
+nrm_factor = 0.96;
+x = x/xmax *nrm_factor; 
 
 % signal parameters
 xlen = length(x);                   
