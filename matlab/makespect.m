@@ -43,7 +43,4 @@ mi = min(ylog(:));
 ylog2 = ylog - mi;
 mx = max(ylog2(:));
 yTosave = ylog2./mx;
-% save
-imwrite(yTosave,'yn.png','BitDepth',16);
-fprintf('saving size out png %dx%d\n', size(yTosave,1),size(yTosave,2));
 end

@@ -5,10 +5,9 @@ close all;
 % clr = jet;
 clr = gray;
 
-% selector = 'yn.png';
-selector = 'test.png';
+selector = 'yn.png';
+% selector = 'test.png';
 
-% music program (stochastic non-stationary signal)
 % [xOrig, fsOrig] = wavread('ben_matlab.wav');   
 load mtlb;xOrig = mtlb;fsOrig = Fs;
 % load('myhandel');xOrig = mtlb;fsOrig = Fs;

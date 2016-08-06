@@ -27,7 +27,7 @@ maxErr = max(max(abs(x-xReco)));
 fprintf('max error (x-xReco) %g\n',maxErr);
 
 figure;
-plot(x),hold on;plot(xReco);
+plot(x),hold all;plot(xReco);
 title('reconstruction');
 
 %% play
