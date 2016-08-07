@@ -1,4 +1,4 @@
-function bL = loadspect(output_path,yTosave,t,f,clr)
+function bL = loadspect(output_path,yTosave,t,f)
 %% load
 bLoaded = double(imread(output_path));
 if size(bLoaded,3) == 3
@@ -23,7 +23,6 @@ subplot(122);
 imagesc([t(1),t(end)],[f(1),f(end)],bLoaded);
 set(gca,'YDir','normal')
 title('png loaded');
-colormap(clr);
 colorbar;
 
 

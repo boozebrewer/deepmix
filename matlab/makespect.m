@@ -27,7 +27,7 @@ x_istft = x_istft(:);
 x_istft = x_istft/max(x_istft);
 % check max error
 [x_istft,x] = trncxy(x_istft,x);
-maxErr = max(max(abs(x_istft-x)));
+maxErr = max(max(abs(trim_edges(x_istft,wlen)-trim_edges(x,wlen))));
 fprintf('max error (x_istft-x) %g\n',maxErr);
 
 %% prepare spectrogram

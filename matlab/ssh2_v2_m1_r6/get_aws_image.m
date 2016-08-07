@@ -1,4 +1,4 @@
-function get_aws_image()
+function get_aws_image(out_folder)
 HOSTNAME = 'ec2-54-174-36-130.compute-1.amazonaws.com';
 USERNAME = 'ubuntu';
 PASSWORD = '';
@@ -12,7 +12,7 @@ ssh2_conn = ssh2_config_publickey(HOSTNAME,USERNAME,PRIVATE_KEY_FILE,'');
 cd(p);
 disp('send get png');
 disp(datetime);
-ssh2_conn = scp_get(ssh2_conn, 'repos/neural-style/spectrum_out/algo_output.png','png');
+ssh2_conn = scp_get(ssh2_conn, 'repos/neural-style/spectrum_out/algo_output.png',out_folder);
 disp('command ended');
 disp(datetime);
 ssh2_conn = ssh2_close(ssh2_conn);
