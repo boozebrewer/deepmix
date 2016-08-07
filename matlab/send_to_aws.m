@@ -8,12 +8,9 @@ p = pwd;
 cd('C:\Users\Ben Golan\Documents\repos\deepmix\matlab\ssh2_v2_m1_r6');
 ssh2_conn = ssh2_config_publickey(HOSTNAME,USERNAME,PRIVATE_KEY_FILE,'');
 cd(p);
-disp('send put png');
-disp(datetime);
+fprintf('%s ',datestr(datetime));disp('send put png');
 ssh2_conn = scp_put(ssh2_conn, {style_path, content_path},remote_path,'',{'style.png','content.png'});
 ssh2_conn = ssh2_close(ssh2_conn);
-disp('command ended');
-disp(datetime);
+fprintf('%s ',datestr(datetime));disp('command ended');
 ssh2_conn = ssh2_close(ssh2_conn);
-disp('closed ssh');
 
