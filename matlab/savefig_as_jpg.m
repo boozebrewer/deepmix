@@ -8,7 +8,7 @@ d=dir([folder,'/*.fig']);
 for i=1:length(d)
     h= openfig(d(i).name);
     h.PaperPositionMode = 'auto';
-    print(fullfile(fl,[d(i).name,'.jpg']),'-dpng','-r0')
+    print(fullfile(fl,[d(i).name,'.jpg']),'-dpng','-r300')
 %     saveas(h,[d(i).name,'.jpg']);
     close(h);
 end

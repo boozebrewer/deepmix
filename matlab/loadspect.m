@@ -12,7 +12,7 @@ maxErr = max(max(abs(yTosave-bLoaded)));
 fprintf('max error (yTosave-bLoaded) %g\n',maxErr);
 
 %% plot
-figure(1);
+figure;
 subplot(121);
 imagesc([t(1),t(end)],[f(1),f(end)],yTosave);
 set(gca,'YDir','normal')

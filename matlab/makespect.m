@@ -1,4 +1,4 @@
-function [yTosave,t,f,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x,nrm_factor] =  makespect(xOrig,fsOrig)
+function [yTosave,t,f,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x,nrm_factor] =  makespect(xOrig,fsOrig, wlen, h, nfft)
 newFs = 8000;
 [P,Q] = rat(newFs/fsOrig);
 abs(P/Q*fsOrig-newFs);
@@ -16,10 +16,11 @@ xlen = length(x);
 t = (0:xlen-1)/fs;                  
 
 % define analysis and synthesis parameters
+if nargin ==2
 wlen=256;
 h = wlen/8;
 nfft = wlen*4;
-
+end
 % perform time-frequency analysis and resynthesis of the original signal
 [stftOut, f, t_stft] = stft(x, wlen, h, nfft, fs);
 [x_istft, t_istft] = istft(stftOut, h, nfft, fs);
