@@ -1,14 +1,14 @@
-% function full_loop()
+function full_loop(style_basename,content_basename,transfer_basename)
 % build spectrogram
 % send to aws for training
 %% init 
 HOSTNAME = 'ec2-54-88-11-92.compute-1.amazonaws.com';
 % paths
-style_wav_path = 'audio/scale_fm_6sec.wav';
-content_wav_path = 'audio/rand_sine_6sec.wav';
-style_path = 'png/style.png';
-content_path = 'png/content.png';
-algo_out_path = 'png/algo_output.png';
+style_wav_path = fullfile('audio',sprintf('%s.wav',style_basename));
+content_wav_path = fullfile('audio',sprintf('%s.wav',content_basename));
+style_path = fullfile('png',sprintf('%s.png',style_basename));
+content_path = fullfile('png',sprintf('%s.png',content_basename));
+algo_out_path = fullfile('png',sprintf('%s.png',transfer_basename));
 algo_out_folder = 'png';
 %% make content
 [xOrig, fsOrig] = audioread(content_wav_path);
