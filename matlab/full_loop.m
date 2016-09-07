@@ -2,7 +2,7 @@
 % build spectrogram
 % send to aws for training
 %% init 
-HOSTNAME = 'ec2-54-209-23-15.compute-1.amazonaws.com';
+HOSTNAME = 'ec2-54-88-11-92.compute-1.amazonaws.com';
 % paths
 style_wav_path = 'audio/scale_fm_6sec.wav';
 content_wav_path = 'audio/rand_sine_6sec.wav';
