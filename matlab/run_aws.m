@@ -29,7 +29,7 @@ cmd_th = ['time th neural_style.lua ' ...
     '-seed 123 '];
 cmd_th = sprintf(cmd_th,init,iters,weight,imsize, org_clr); 
 cmd = 'echo $PATH;export PATH=/home/ubuntu/torch/install/bin:/home/ubuntu/anaconda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/cuda/bin:/path/to/dir1;echo $PATH; ';
-cmd = [cmd, cmd_th];
+cmd = [cmd, cmd_th, ' > stdout.txt'];
 [ssh2_struct, command_result] = ssh2_command(ssh2_conn, ['cd ~/repos/neural-style/; ', cmd]);
 % disp(command_result);
 fprintf('%s ',datestr(datetime));disp('command ended');
