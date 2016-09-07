@@ -1,2 +1,5 @@
 *.db
 webserver/webserver/algo_out/*
+matlab/results/output/style_DtmfVsContent_Ben_holechParams__Weight1000_Imsize513_Iters100_InitImage_Original_color0_time.fig.jpg
+matlab/results/output/
+.idea/

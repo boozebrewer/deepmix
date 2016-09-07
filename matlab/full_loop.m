@@ -2,10 +2,10 @@
 % build spectrogram
 % send to aws for training
 %% init 
-HOSTNAME = 'ec2-54-88-11-92.compute-1.amazonaws.com';
+HOSTNAME = '54.88.11.92';
 % paths
-style_wav_path = 'audio/scale_fm_6sec.wav';
-content_wav_path = 'audio/scale_fm_6sec.wav';
+style_wav_path = 'audio/argov_6sec.wav';
+content_wav_path = 'audio/gov_6sec.wav';
 style_path = 'png/style.png';
 content_path = 'png/content.png';
 algo_out_path = 'png/algo_output.png';
@@ -43,7 +43,7 @@ fprintf('saving size out png %dx%d\n', size(styleTosave,1),size(styleTosave,2));
 send_to_aws(style_path, content_path,HOSTNAME);
 %%
 % init='image' or 'random'
-weight=500; imsize=513; iters=250; init='random'; original_color =0;
+weight=3000; imsize=513; iters=250; init='image'; original_color =0;
 run_aws(weight, imsize, iters, init,original_color,HOSTNAME);
 %%
 get_aws_image(algo_out_folder,HOSTNAME);
