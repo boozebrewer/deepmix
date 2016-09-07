@@ -56,7 +56,7 @@ paramstxt = sprintf('weight %d, imsize %d, iters %d, init %s, original_color %d'
 runname = [ttl, '  params-> ', paramstxt];
 mysuptitle(runname);
 valid_runname = mymakeValidName(runname);
-figname = sprintf('results/%s.fig',valid_runname);
+figname = sprintf('results/output/%s.fig',valid_runname);
 savefig(figname);
 saveas(gcf,[figname,'.jpg']);
 %% load
@@ -64,7 +64,7 @@ bL = loadspect(algo_out_path,contentTosave,t,f);
 %% reconstruction
 xReco = reconstruct(bL,mx,mi,ymax,yabs,yphase,h,nfft,fs,y,x,nrm_factor);
 title(runname,'interpreter','none');
-figname = sprintf('results/%s_time.fig',valid_runname);
+figname = sprintf('results/output/%s_time.fig',valid_runname);
 savefig(figname);
 saveas(gcf,[figname,'.jpg']);
 audiowrite([figname,'.wav'],xReco,fs);
