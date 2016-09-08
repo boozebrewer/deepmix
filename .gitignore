@@ -5,3 +5,4 @@ matlab/results/output/
 .idea/
 matlab/images/
 matlab/spec_in/test.png
+matlab/results/notebook/.ipynb_checkpoints/
